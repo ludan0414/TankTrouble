@@ -9,7 +9,15 @@ Tank::Tank(double Xpos,double Ypos,double Dirx,double Diry,int Color,char l,char
     shield=0;
 }
 double totheta(double x,double y){
-    return atan(x/y)*180/3.1415926;
+    if (x>0&&y>0)   return atan(y/x)*180/3.1415926;
+    if (x<0&&y>0)   return 180+atan(y/x)*180/3.1415926;
+    if (x<0&&y<0)   return 180+atan(y/x)*180/3.1415926;
+    if (x>0&&y<0)   return 360+atan(y/x)*180/3.1415926;
+    if (x==0&&y==1) return 90;
+    if (x==0&&y==-1)    return 270;
+    if (y==0&&x==1) return 0;
+    if (y==0&&x==-1)    return 180;
+    throw "WTF?";
 }
 std::pair<double,double> toxy(double theta){
     return std::make_pair(cos(theta/180*3.1415926),sin(theta/180*3.1415926));
@@ -19,7 +27,7 @@ void Tank::move(){
     if (inp[0]){
         //左转
         double theta=totheta(dirx,diry);
-        theta+=6;//左转6°（一秒转完一圈）
+        theta-=6;//左转6°（一秒转完一圈）
         auto tmp=toxy(theta);
         dirx=tmp.first;
         diry=tmp.second;
@@ -27,7 +35,7 @@ void Tank::move(){
     if (inp[1]){
         //右转
         double theta=totheta(dirx,diry);
-        theta-=6;//右转6°（一秒转完一圈）
+        theta+=6;//右转6°（一秒转完一圈）
         auto tmp=toxy(theta);
         dirx=tmp.first;
         diry=tmp.second;
@@ -39,12 +47,12 @@ void Tank::move(){
         bool valid=1;
         for (auto ptr:Game::walls){
             if (ptr->direction){//竖着的
-                if (ypos>ptr->ypos && ypos<ptr->ypos+1 && xpos>ptr->xpos-size && xpos<ptr->xpos+size){//撞墙
+                if (ty>ptr->ypos && ty<ptr->ypos+1 && tx>ptr->xpos-size && tx<ptr->xpos+size){//撞墙
                     valid=0;
                 }
             }
             else{//横着的
-                if (xpos>ptr->xpos && xpos<ptr->xpos+1 && ypos>ptr->ypos-size && ypos<ptr->ypos+size){//撞墙
+                if (tx>ptr->xpos && tx<ptr->xpos+1 && ty>ptr->ypos-size && ty<ptr->ypos+size){//撞墙
                     valid=0;
                 }
             }
@@ -58,12 +66,12 @@ void Tank::move(){
         bool valid=1;
         for (auto ptr:Game::walls){
             if (ptr->direction){//竖着的
-                if (ypos>ptr->ypos && ypos<ptr->ypos+1 && xpos>ptr->xpos-size && xpos<ptr->xpos+size){//撞墙
+                if (ty>ptr->ypos && ty<ptr->ypos+1 && tx>ptr->xpos-size && tx<ptr->xpos+size){//撞墙
                     valid=0;
                 }
             }
             else{//横着的
-                if (xpos>ptr->xpos && xpos<ptr->xpos+1 && ypos>ptr->ypos-size && ypos<ptr->ypos+size){//撞墙
+                if (tx>ptr->xpos && tx<ptr->xpos+1 && ty>ptr->ypos-size && ty<ptr->ypos+size){//撞墙
                     valid=0;
                 }
             }
