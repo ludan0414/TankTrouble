@@ -4,10 +4,16 @@ Bullet::Bullet(double Xpos,double Ypos,double Dirx,double Diry,int Color):Object
     diry=Diry;
     age=0;
     Game::bulletcnt[Color]++;
-    speed=1.0/60;//每秒移动一个单位
+    speed=1.0/20;//每秒移动一个单位
     fprintf(stderr,"bulletgen\n");
 }
 void Bullet::destroy(){
+    for (auto iter=Game::bullets.begin();iter!=Game::bullets.end();iter++){
+        if (*iter==this){
+            Game::bullets.erase(iter);
+            break;
+        }
+    }
     delete this;
     return;
 }
@@ -19,19 +25,26 @@ void Bullet::move(){
         destroy();
         return;
     }
+    bool crashx=0,crashy=0;
     for (auto ptr:Game::walls){
         if (ptr->direction){//竖着的
-            if (ypos>ptr->ypos && ypos<ptr->ypos+1 && xpos>ptr->xpos-size && xpos<ptr->xpos+size){//撞墙
-                dirx=-dirx;
+            if (ypos>=ptr->ypos && ypos<=ptr->ypos+1 && xpos>=ptr->xpos-size && xpos<=ptr->xpos+size){//撞墙
+                crashx=1;
                 fprintf(stderr,"bulletbounce\n");
             }
         }
         else{//横着的
-            if (xpos>ptr->xpos && xpos<ptr->xpos+1 && ypos>ptr->ypos-size && ypos<ptr->ypos+size){//撞墙
-                diry=-diry;
+            if (xpos>=ptr->xpos && xpos<=ptr->xpos+1 && ypos>=ptr->ypos-size && ypos<=ptr->ypos+size){//撞墙
+                crashy=1;
                 fprintf(stderr,"bulletbounce\n");
             }
         }
+    }
+    if (crashx||crashy){
+        xpos-=speed*dirx;
+        ypos-=speed*diry;
+        if (crashx) dirx=-dirx;
+        if (crashy) diry=-diry;
     }
 }
 Bullet::~Bullet(){

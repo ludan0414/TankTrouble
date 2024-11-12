@@ -2,4 +2,4 @@ CC = g++
 CFLAGS = -c -Wall
 
 tanktrouble: 
-	$(CC) 
+	$(CC) tanktrouble.cpp -o tanktrouble

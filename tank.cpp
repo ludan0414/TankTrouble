@@ -47,12 +47,12 @@ void Tank::move(){
         bool valid=1;
         for (auto ptr:Game::walls){
             if (ptr->direction){//竖着的
-                if (ty>ptr->ypos && ty<ptr->ypos+1 && tx>ptr->xpos-size && tx<ptr->xpos+size){//撞墙
+                if (ty>=ptr->ypos && ty<=ptr->ypos+1 && tx>=ptr->xpos-size && tx<=ptr->xpos+size){//撞墙
                     valid=0;
                 }
             }
             else{//横着的
-                if (tx>ptr->xpos && tx<ptr->xpos+1 && ty>ptr->ypos-size && ty<ptr->ypos+size){//撞墙
+                if (tx>=ptr->xpos && tx<=ptr->xpos+1 && ty>=ptr->ypos-size && ty<=ptr->ypos+size){//撞墙
                     valid=0;
                 }
             }

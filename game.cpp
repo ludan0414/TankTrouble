@@ -13,10 +13,14 @@ Game::Game(){
         walls.emplace_back(new Wall(0,j,0,j+1));
         walls.emplace_back(new Wall(gridx,j,gridx,j+1));
     }
+    //test
+    bullets.emplace_back(new Bullet(1,0.2,0,-1,1));
+    //
 }
 void Game::runframe(){
     for (auto p:bullets){
         p->move();
+        fprintf(stderr,"pos %lf %lf, dir %lf %lf, age%d\n",p->xpos,p->ypos,p->dirx,p->diry,p->age);
     }
     op1->move();
     op2->move();
