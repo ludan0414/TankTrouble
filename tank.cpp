@@ -1,6 +1,7 @@
 #include "tanktrouble.hpp"
 #include <cmath>
 #include <utility>
+#include <cstdio>
 Tank::Tank(double Xpos,double Ypos,double Dirx,double Diry,int Color,char l,char r,char f,char b,char s):Object(Xpos,Ypos),Team(Color),size(0.3),input(l,r,f,b,s){
     dirx=Dirx;
     diry=Diry;
@@ -81,7 +82,7 @@ void Tank::move(){
     if (inp[4]){
         //射
         if (Game::bulletcnt[color]<3){
-            Game::bullets.emplace_back(new Bullet(xpos+size+0.06,ypos+size+0.06,dirx,diry,color));
+            Game::bullets.emplace_back(new Bullet(xpos+(size+0.06)*dirx,ypos+(size+0.06)*diry,dirx,diry,color));
         }
     }
     //判断是否被击中
@@ -92,6 +93,7 @@ void Tank::move(){
             //被击中了
             ptr->destroy();
             hp--;
+            fprintf(stderr,"hit\n");
         }
         else{
             newlst.emplace_back(ptr);
@@ -101,6 +103,6 @@ void Tank::move(){
     Game::bullets.clear();
     Game::bullets.swap(newlst);
     if (hp<=0){
-        throw(color-1);
+        throw(color-2);
     }
 }

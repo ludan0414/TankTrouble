@@ -1,4 +1,5 @@
 #include "tanktrouble.hpp"
+#include <cstdio>
 Bullet::Bullet(double Xpos,double Ypos,double Dirx,double Diry,int Color):Object(Xpos,Ypos),Team(Color),maxage(20),size(0.05){
     dirx=Dirx;
     diry=Diry;

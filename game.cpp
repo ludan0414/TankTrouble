@@ -1,5 +1,6 @@
 #include "tanktrouble.hpp"
 #include <ctime>
+#include <cstdio>
 //#define debug
 Game::Game(){
     op1=new Tank(0.5,0.5,1,0,0,'A','D','W','S',13);//WASD Enter
@@ -28,11 +29,11 @@ void Game::runframe(){
 }
 int Game::run(){
     auto lst=clock();
-    //auto frametime=CLOCKS_PER_SEC/60.0;
+    //auto frametime=CLOCKS_PER_SEC/60.0;这里计算帧数
     auto frametime=CLOCKS_PER_SEC/3;
     auto endtime=lst+(100*CLOCKS_PER_SEC);
     #ifdef debug
-    printf("%ld\n",endtime);
+    fprintf(stderr,"%ld\n",endtime);
     #endif
     runframe();
     while (1){
@@ -40,19 +41,19 @@ int Game::run(){
         if (nextframe>endtime)  break;
         auto now=clock();
         #ifdef debug
-        printf("now %ld lst %ld\n",now,lst);
+        fprintf(stderr,"now %ld lst %ld\n",now,lst);
         #endif
         if (now<nextframe)  Sleep(nextframe-now);
         try{
             runframe();
         }
         catch (int id){
-            printf("terminated\n");
+            fprintf(stderr,"terminated\n");
             return id;
         }
         lst=now;
         #ifdef debug
-        printf("%lf %lf\n",op1->xpos,op1->ypos);
+        fprintf(stderr,"%lf %lf\n",op1->xpos,op1->ypos);
         #endif
 
     }
